@@ -1,32 +1,23 @@
-# Etapa de build
-FROM ubuntu:latest AS build
+# Use a imagem base do Ubuntu
+FROM ubuntu:latest
 
-# Atualizando a lista de pacotes e instalando Java e Maven
-RUN apt-get update && apt-get install -y openjdk-21-jdk maven
+# Instale o Java 21 e Maven
+RUN apt-get update && apt-get install -y openjdk-21-jdk maven && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Define o diretório de trabalho
+# Define o diretório de trabalho na imagem
 WORKDIR /app
 
-# Copiando o código-fonte e o arquivo .env para a imagem
-COPY . .
+# Copia o arquivo JAR da aplicação para o diretório de trabalho
+COPY target/vendas-*.jar app.jar
 
-# Construindo o projeto
-RUN mvn clean install -DskipTests
+# Copia o arquivo .env para o diretório de trabalho
+COPY .env ./
 
-# Usando a imagem base do OpenJDK 21 slim para o runtime
-FROM openjdk:21-slim
-
-# Define o diretório de trabalho
-WORKDIR /app
-
-# Expondo a porta 8080
+# Exponha a porta que a aplicação irá rodar
 EXPOSE 8080
 
-# Copiando o JAR gerado na etapa de build e o arquivo .env para a imagem final
-COPY --from=build /app/target/vendas-*.jar app.jar
-COPY --from=build /app/.env ./
+# Comando para rodar a aplicação
+CMD ["java", "-jar", "app.jar"]
 
-# Definindo o comando de entrada para executar o JAR
-ENTRYPOINT ["java", "-jar", "app.jar"]
 
 
