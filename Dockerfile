@@ -11,7 +11,7 @@ WORKDIR /app
 COPY target/vendas-*.jar app.jar
 
 # Copia o arquivo .env para o diretório de trabalho
-COPY .env ./
+#COPY .env ./
 
 # Exponha a porta que a aplicação irá rodar
 EXPOSE 8080
