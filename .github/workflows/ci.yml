@@ -38,10 +38,10 @@ jobs:
         run: mvn clean package
 
       - name: Build Docker image
-        run: docker build -t your-dockerhub-username/gestao-estoque .
+        run: docker build -t alves74/gestao-estoque .
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.PASSWORD }}" | docker login -u "${{ secrets.USERNAME }}" --password-stdin
 
       - name: Push Docker image
-        run: docker push your-dockerhub-username/gestao-estoque
+        run: docker push alves74/gestao-estoque
