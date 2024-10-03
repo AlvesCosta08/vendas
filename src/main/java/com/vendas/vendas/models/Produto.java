@@ -3,6 +3,7 @@ package com.vendas.vendas.models;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "produto")
@@ -40,6 +41,9 @@ public class Produto {
 
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
+
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
+    private List<PedidoProduto> pedidoProdutos;
 
     public Produto() {}
 
@@ -134,5 +138,13 @@ public class Produto {
 
     public LocalDateTime getDataAtualizacao() {
         return dataAtualizacao;
+    }
+
+    public List<PedidoProduto> getPedidoProdutos() {
+        return pedidoProdutos;
+    }
+
+    public void setPedidoProdutos(List<PedidoProduto> pedidoProdutos) {
+        this.pedidoProdutos = pedidoProdutos;
     }
 }
