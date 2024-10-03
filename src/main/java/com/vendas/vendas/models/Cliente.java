@@ -3,8 +3,10 @@ package com.vendas.vendas.models;
 import jakarta.persistence.*;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE) // Usa uma única tabela para os dois tipos
+@DiscriminatorColumn(name = "tipo_cliente") // Coluna para discriminar Pessoa Física e Jurídica
 @Table(name = "cliente")
-public class Cliente {
+public abstract class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,19 +22,22 @@ public class Cliente {
     @Column(name = "telefone", length = 15)
     private String telefone;
 
-    @Embedded
-    private Endereco endereco;
+    @ManyToOne
+    @JoinColumn(name = "endereco_id", foreignKey = @ForeignKey(name = "fk_cliente_endereco"))
+    private Endereco endereco; // Referência ao endereço
 
-    public Cliente() {}
+    public Cliente() {
+    }
 
-    public Cliente(String nome, String email, String telefone, Endereco endereco) {
+    public Cliente(Long id, String nome, String email, String telefone, Endereco endereco) {
+        this.id = id;
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;
-        this.endereco = endereco;
+        this.endereco = endereco; // Inicializa a referência ao endereço
     }
 
-    // Getters e Setters
+    // Getters e Setters comuns
     public Long getId() {
         return id;
     }
@@ -66,11 +71,11 @@ public class Cliente {
     }
 
     public Endereco getEndereco() {
-        return endereco;
+        return endereco; // Getter para o endereço
     }
 
     public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
+        this.endereco = endereco; // Setter para o endereço
     }
 }
 

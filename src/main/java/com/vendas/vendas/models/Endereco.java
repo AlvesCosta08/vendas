@@ -1,31 +1,54 @@
 package com.vendas.vendas.models;
 
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 
-@Embeddable
+@Entity
+@Table(name = "endereco")
 public class Endereco {
 
-    private String rua;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_endereco", nullable = false)
+    private Long id;
+
+    @Column(name = "logradouro", length = 200)
+    private String logradouro;
+
+    @Column(name = "cidade", length = 100)
     private String cidade;
-    private String estado;
+
+    @Column(name = "uf", length = 2)
+    private String uf;
+
+    @Column(name = "cep", length = 9)
     private String cep;
 
-    public Endereco() {}
+    public Endereco() {
+    }
 
-    public Endereco(String rua, String cidade, String estado, String cep) {
-        this.rua = rua;
+    public Endereco(Long id, String logradouro, String cidade, String uf, String cep) {
+        this.id = id;
+        this.logradouro = logradouro;
         this.cidade = cidade;
-        this.estado = estado;
+        this.uf = uf;
         this.cep = cep;
     }
 
     // Getters e Setters
-    public String getRua() {
-        return rua;
+    public Long getId() {
+        return id;
     }
 
-    public void setRua(String rua) {
-        this.rua = rua;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getLogradouro() {
+        return logradouro;
+    }
+
+    public void setLogradouro(String logradouro) {
+        this.logradouro = logradouro;
     }
 
     public String getCidade() {
@@ -36,12 +59,12 @@ public class Endereco {
         this.cidade = cidade;
     }
 
-    public String getEstado() {
-        return estado;
+    public String getUf() {
+        return uf;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setUf(String uf) {
+        this.uf = uf;
     }
 
     public String getCep() {
@@ -52,4 +75,3 @@ public class Endereco {
         this.cep = cep;
     }
 }
-

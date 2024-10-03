@@ -1,7 +1,11 @@
 package com.vendas.vendas.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+
 import java.math.BigDecimal;
+
 
 @Entity
 @Table(name = "pedido_produto")
@@ -21,9 +25,11 @@ public class PedidoProduto {
     private Produto produto;
 
     @Column(name = "quantidade", nullable = false)
+    @Min(1) // Garante que a quantidade seja maior que zero
     private Integer quantidade;
 
     @Column(name = "valor_unitario", nullable = false, precision = 10, scale = 2)
+    @DecimalMin("0.00") // Garante que o valor unitário seja maior ou igual a zero
     private BigDecimal valorUnitario;
 
     @Column(name = "subtotal", nullable = false, precision = 10, scale = 2)
@@ -41,6 +47,12 @@ public class PedidoProduto {
 
     private BigDecimal calcularSubtotal() {
         return valorUnitario.multiply(BigDecimal.valueOf(quantidade));
+    }
+
+    @PrePersist
+    @PreUpdate
+    private void atualizarSubtotal() {
+        this.subtotal = calcularSubtotal();
     }
 
     // Getters e Setters
@@ -88,6 +100,10 @@ public class PedidoProduto {
 
     public BigDecimal getSubtotal() {
         return subtotal;
+    }
+
+    public void setSubtotal(BigDecimal subtotal) {
+        this.subtotal = subtotal;
     }
 }
 

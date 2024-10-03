@@ -11,3 +11,4 @@ CREATE TABLE produto (
     FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria) ON DELETE SET NULL
 ) COMMENT='Tabela para armazenar os produtos disponíveis';
 
+
