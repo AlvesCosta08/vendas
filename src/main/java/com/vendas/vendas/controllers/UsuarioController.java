@@ -3,7 +3,9 @@ package com.vendas.vendas.controllers;
 import com.vendas.vendas.exceptions.UsuarioAlreadyExistsException;
 import com.vendas.vendas.exceptions.UsuarioNotFoundException;
 import com.vendas.vendas.models.Usuario;
+import com.vendas.vendas.services.JwtService;
 import com.vendas.vendas.services.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,19 +18,34 @@ import java.util.List;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+    private final JwtService jwtService;
 
     @Autowired
-    public UsuarioController(UsuarioService usuarioService) {
+    public UsuarioController(UsuarioService usuarioService, JwtService jwtService) {
         this.usuarioService = usuarioService;
+        this.jwtService = jwtService;
     }
 
-    @PostMapping
-    public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
+    @PostMapping("/auth/register")
+    public ResponseEntity<?> registrarUsuario(@Valid @RequestBody Usuario usuario) {
         try {
             Usuario novoUsuario = usuarioService.salvarUsuario(usuario);
-            return ResponseEntity.ok(novoUsuario);
+            return ResponseEntity.status(HttpStatus.CREATED).body(novoUsuario);
         } catch (UsuarioAlreadyExistsException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário já existe.");
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno do servidor.");
+        }
+    }
+
+    @PostMapping("/auth/login")
+    public ResponseEntity<String> loginUsuario(@RequestBody Usuario usuario) {
+        try {
+            Usuario usuarioAutenticado = usuarioService.autenticarUsuario(usuario.getEmail(), usuario.getSenha());
+            String token = jwtService.generateToken(String.valueOf(usuarioAutenticado));
+            return ResponseEntity.ok(token);
+        } catch (UsuarioNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário ou senha inválidos.");
         }
     }
 

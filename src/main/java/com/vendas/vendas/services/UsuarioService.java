@@ -6,6 +6,7 @@ import com.vendas.vendas.models.Usuario;
 import com.vendas.vendas.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,10 +16,12 @@ import java.util.Optional;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder; // Mudança aqui
 
     @Autowired
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
@@ -27,6 +30,7 @@ public class UsuarioService {
         if (usuarioExistente.isPresent()) {
             throw new UsuarioAlreadyExistsException("Usuário com email " + usuario.getEmail() + " já existe.");
         }
+        usuario.setSenha(passwordEncoder.encode(usuario.getSenha())); // Hasheando a senha
         return usuarioRepository.save(usuario);
     }
 
@@ -45,4 +49,16 @@ public class UsuarioService {
         }
         usuarioRepository.deleteById(id);
     }
+
+    public Usuario autenticarUsuario(String email, String senha) throws UsuarioNotFoundException {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
+            if (passwordEncoder.matches(senha, usuario.getSenha())) { // Verificação segura da senha
+                return usuario;
+            }
+        }
+        throw new UsuarioNotFoundException("Usuário ou senha inválidos.");
+    }
 }
+
