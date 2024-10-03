@@ -51,4 +51,22 @@ vendas/
 │       └── java/                         # Testes em Java
 └── README.md                             # Documentação do projeto
 
-                        
+```                        
+## Tecnologias Utilizadas
+- **Spring Boot**: Framework para desenvolvimento rápido de aplicações Java.
+- **Spring Security**: Implementa a segurança da aplicação, configurando a proteção dos endpoints e a autenticação JWT.
+- **JWT (JSON Web Token)**: Método para autenticação sem estado (stateless) entre cliente e servidor.
+- **JPA (Java Persistence API)**: Para interação com o banco de dados, mapeamento de entidades e execução de operações de CRUD.
+- **BCrypt**: Algoritmo para codificação segura de senhas.
+
+## Endpoints Principais
+- `POST /auth/register`: Registro de novos usuários.
+- `POST /auth/login`: Autenticação de usuários e geração de token JWT.
+- `GET /usuarios`: Listar todos os usuários (requer autenticação JWT).
+- `GET /usuarios/{email}`: Buscar usuário pelo email (requer autenticação JWT).
+- `DELETE /usuarios/{id}`: Excluir usuário pelo ID (requer autenticação JWT).
+
+## Segurança
+A API usa **Spring Security** para autenticação e autorização, onde:
+- Usuários autenticam-se via email e senha no endpoint de login.
+- Um **token JWT** é gerado e usado para autenticar requisições subsequentes, enviado no cabeçalho `Authorization` como "Bearer {token}".
