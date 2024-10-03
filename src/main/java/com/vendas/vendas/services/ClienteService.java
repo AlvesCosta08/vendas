@@ -7,6 +7,8 @@ import com.vendas.vendas.models.PessoaFisica;
 import com.vendas.vendas.models.PessoaJuridica;
 import com.vendas.vendas.repository.ClienteRepository;
 import com.vendas.vendas.repository.EnderecoRepository;
+import com.vendas.vendas.repository.PessoaFisicaRepository;
+import com.vendas.vendas.repository.PessoaJuridicaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,11 +22,16 @@ public class ClienteService {
 
     private final ClienteRepository clienteRepository;
     private final EnderecoRepository enderecoRepository;
+    private final PessoaFisicaRepository pessoaFisicaRepository;
+    private final PessoaJuridicaRepository pessoaJuridicaRepository;
+
 
     @Autowired
-    public ClienteService(ClienteRepository clienteRepository, EnderecoRepository enderecoRepository) {
+    public ClienteService(ClienteRepository clienteRepository, EnderecoRepository enderecoRepository, PessoaFisicaRepository pessoaFisicaRepository, PessoaJuridicaRepository pessoaJuridicaRepository) {
         this.clienteRepository = clienteRepository;
         this.enderecoRepository = enderecoRepository;
+        this.pessoaFisicaRepository = pessoaFisicaRepository;
+        this.pessoaJuridicaRepository = pessoaJuridicaRepository;
     }
 
     @Transactional
@@ -71,7 +78,7 @@ public class ClienteService {
 
     private void validarCpf(PessoaFisica pessoaFisica) {
         String cpf = pessoaFisica.getCpf();
-        if (clienteRepository.findByCpf(cpf).isPresent()) {
+        if (pessoaFisicaRepository.findByCpf(cpf).isPresent()) {
             throw new IllegalArgumentException("CPF já cadastrado: " + cpf);
         }
         // Aqui você pode adicionar a lógica para validar o formato do CPF
@@ -80,7 +87,7 @@ public class ClienteService {
 
     private void validarCnpj(PessoaJuridica pessoaJuridica) {
         String cnpj = pessoaJuridica.getCnpj();
-        if (clienteRepository.findByCnpj(cnpj).isPresent()) {
+        if (pessoaJuridicaRepository.findByCnpj(cnpj).isPresent()) {
             throw new IllegalArgumentException("CNPJ já cadastrado: " + cnpj);
         }
         // Aqui você pode adicionar a lógica para validar o formato do CNPJ
