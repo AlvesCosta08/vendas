@@ -1,7 +1,7 @@
 -- Criar tabela de roles
 CREATE TABLE roles (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL
+    nome VARCHAR(255) NOT NULL UNIQUE  -- Adicionado UNIQUE para garantir que os nomes de roles sejam únicos
 ) ENGINE=InnoDB;
 
 -- Criar tabela de usuários com id_usuario

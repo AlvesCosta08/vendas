@@ -11,13 +11,21 @@ import java.util.Set;
 public class UserInfo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Mudança de AUTO para IDENTITY
+    @Column(name = "id_usuario") // Mudança para corresponder ao nome da coluna na tabela
     private long id;
+
     private String username;
+
     @JsonIgnore
     private String password;
-    @ManyToMany(fetch = FetchType.EAGER)
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "usuario_roles",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
     private Set<UserRole> roles = new HashSet<>();
 
     public UserInfo() {
@@ -30,6 +38,7 @@ public class UserInfo {
         this.roles = roles;
     }
 
+    // Getters e Setters
     public long getId() {
         return id;
     }

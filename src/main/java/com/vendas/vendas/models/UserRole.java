@@ -3,16 +3,16 @@ package com.vendas.vendas.models;
 import jakarta.persistence.*;
 
 @Entity
-
 @Table(name = "roles")
 public class UserRole {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Mudança de AUTO para IDENTITY
+    @Column(name = "id") // Ajustando para corresponder à coluna
     private long id;
-    private String nome;
 
+    @Column(nullable = false, unique = true)
+    private String nome;
 
     public UserRole() {
     }
@@ -22,6 +22,7 @@ public class UserRole {
         this.nome = nome;
     }
 
+    // Getters e Setters
     public long getId() {
         return id;
     }
