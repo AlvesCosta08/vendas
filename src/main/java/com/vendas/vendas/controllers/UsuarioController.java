@@ -22,11 +22,11 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<UsuarioDTO> registrarUsuario(@Valid @RequestBody UsuarioDTO usuarioDTO) {
-        Usuario usuario = new Usuario(); // Cria um novo objeto Usuario a partir do DTO
+        Usuario usuario = new Usuario();
         usuario.setNome(usuarioDTO.getNome());
         usuario.setEmail(usuarioDTO.getEmail());
         usuario.setTipoRole(usuarioDTO.getTipoRole());
-        // A senha não deve ser definida aqui, deve ser gerenciada no serviço.
+        usuario.setSenha(usuarioDTO.getSenha());
 
         Usuario usuarioSalvo = usuarioService.registrarUsuario(usuario);
         return new ResponseEntity<>(converterParaDTO(usuarioSalvo), HttpStatus.CREATED);
@@ -54,7 +54,7 @@ public class UsuarioController {
         usuarioAtualizado.setEmail(usuarioAtualizadoDTO.getEmail());
         usuarioAtualizado.setTipoRole(usuarioAtualizadoDTO.getTipoRole());
         usuarioAtualizado.setAtivo(usuarioAtualizadoDTO.getAtivo());
-        // A senha deve ser gerenciada no serviço.
+
 
         Usuario usuario = usuarioService.atualizarUsuario(idUsuario, usuarioAtualizado);
         return new ResponseEntity<>(converterParaDTO(usuario), HttpStatus.OK);
@@ -72,6 +72,7 @@ public class UsuarioController {
                 usuario.getIdUsuario(),
                 usuario.getNome(),
                 usuario.getEmail(),
+                usuario.getSenha(),
                 usuario.getTipoRole(),
                 usuario.getAtivo()
         );

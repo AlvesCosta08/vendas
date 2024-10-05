@@ -48,7 +48,7 @@ public class UsuarioService {
         Usuario usuario = buscarPorId(idUsuario);
         usuarioValidator.verificarEmailDuplicado(usuarioAtualizado.getEmail(), usuario.getEmail());
 
-        if (!passwordService.isPasswordMatching(usuarioAtualizado.getSenha(), usuario.getSenha())) {
+        if (usuarioAtualizado.getSenha() != null && !usuarioAtualizado.getSenha().isEmpty()) {
             usuario.setSenha(passwordService.hashPassword(usuarioAtualizado.getSenha()));
         }
 
