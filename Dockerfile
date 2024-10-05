@@ -1,45 +1,41 @@
-# Etapa de construção
-FROM ubuntu:22.04 AS build
+# Etapa de build
+FROM ubuntu:latest AS build
 
+# Atualizando a lista de pacotes e instalando Java e Maven
+RUN apt-get update && apt-get install -y openjdk-21-jdk maven
 
-RUN apt-get update && \
-    apt-get install -y openjdk-21-jdk maven && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-
+# Define o diretório de trabalho
 WORKDIR /app
 
+# Copiando o código-fonte e o arquivo .env para a imagem
+COPY . .
 
-COPY pom.xml .
-COPY src ./src
+# Construindo o projeto
+RUN mvn clean install -DskipTests
 
+# Usando a imagem base do OpenJDK 21 slim para o runtime
+FROM openjdk:21-slim
 
-RUN mvn clean package -DskipTests
-
-
-FROM ubuntu:22.04
-
-
-RUN apt-get update && \
-    apt-get install -y openjdk-21-jdk && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-
+# Define o diretório de trabalho
 WORKDIR /app
 
-
-COPY --from=build /app/target/*.jar app.jar
-
-
-COPY .env ./
-
-
+# Expondo a porta 8080
 EXPOSE 8080
 
+# Copiando o JAR gerado na etapa de build e o arquivo .env para a imagem final
+COPY --from=build /app/target/vendas-*.jar app.jar
+COPY --from=build /app/.env ./
 
-CMD ["java", "-jar", "app.jar"]
+# Definindo o comando de entrada para executar o JAR
+ENTRYPOINT ["java", "-jar", "app.jar"]
+
+
+
+
+
+
+
+
 
 
 
