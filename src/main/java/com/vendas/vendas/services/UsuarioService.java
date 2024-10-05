@@ -1,5 +1,6 @@
 package com.vendas.vendas.services;
 
+import com.vendas.vendas.dto.UsuarioDTO;
 import com.vendas.vendas.exceptions.UsuarioNotFoundException;
 import com.vendas.vendas.models.Usuario;
 import com.vendas.vendas.repository.UsuarioRepository;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class UsuarioService {
@@ -25,13 +27,29 @@ public class UsuarioService {
         this.usuarioValidator = usuarioValidator;
     }
 
-    public Usuario registrarUsuario(Usuario usuario) {
-        usuarioValidator.verificarEmailDuplicado(usuario.getEmail());
-        usuario.setSenha(passwordService.hashPassword(usuario.getSenha()));
+    public UsuarioDTO registrarUsuario(UsuarioDTO usuarioDTO) {
+        // Verifica se o e-mail já está cadastrado
+        usuarioValidator.verificarEmailDuplicado(usuarioDTO.getEmail());
+
+
+        Usuario usuario = new Usuario();
+        usuario.setNome(usuarioDTO.getNome());
+        usuario.setEmail(usuarioDTO.getEmail());
+        usuario.setTipoRole(usuarioDTO.getTipoRole());
+        usuario.setSenha(passwordService.hashPassword(usuarioDTO.getSenha()));
         usuario.setAtivo(true);
         usuario.setDataCriacao(LocalDateTime.now());
         usuario.setDataAtualizacao(LocalDateTime.now());
-        return usuarioRepository.save(usuario);
+
+        usuario = usuarioRepository.save(usuario);
+
+        return new UsuarioDTO(usuario.getIdUsuario(), usuario.getNome(), usuario.getEmail(), null, usuario.getTipoRole(), usuario.getAtivo());
+
+    }
+
+
+    public List<Usuario> buscarTodos() {
+        return usuarioRepository.findAll();
     }
 
     public Usuario buscarPorId(Long idUsuario) {

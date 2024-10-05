@@ -25,7 +25,7 @@ public class CustomUserDetails implements UserDetails {
         this.password = user.getSenha();
 
         List<GrantedAuthority> auths = new ArrayList<>();
-        auths.add(new SimpleGrantedAuthority(user.getTipoRole().toUpperCase())); // Acesso direto ao método
+        auths.add(new SimpleGrantedAuthority(user.getTipoRole().toUpperCase()));
 
         this.authorities = auths;
     }

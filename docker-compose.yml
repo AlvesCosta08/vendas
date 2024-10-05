@@ -1,17 +1,21 @@
 services:
   mysql:
-    image: mysql:latest
-    restart: always
+    image: mysql:8.0  # Mudado para uma versão estável do MySQL
+    container_name: meu-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: vendas
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    command: --default-authentication-plugin=caching_sha2_password  # Mantido, pois agora é suportado
     ports:
       - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
+    restart: always
 
 volumes:
-  mysql_data:
+  mysql-data:
+    driver: local
+
 

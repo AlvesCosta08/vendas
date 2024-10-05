@@ -1,5 +1,6 @@
 package com.vendas.vendas.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 public class UsuarioDTO {
@@ -9,6 +10,7 @@ public class UsuarioDTO {
     private String nome;
 
     @NotBlank(message = "Email é obrigatório")
+    @Email(message = "Email deve ser válido")
     private String email;
 
     @NotBlank(message = "Tipo de Role é obrigatório")
@@ -19,17 +21,15 @@ public class UsuarioDTO {
     @NotBlank(message = "Senha é obrigatória")
     private String senha;
 
-
     public UsuarioDTO() {}
-
 
     public UsuarioDTO(Long idUsuario, String nome, String email, String senha, String tipoRole, Boolean ativo) {
         this.idUsuario = idUsuario;
         this.nome = nome;
         this.email = email;
+        this.senha = senha; // Novo campo
         this.tipoRole = tipoRole;
         this.ativo = ativo;
-        this.senha = senha;  // Atribuindo senha
     }
 
     public Long getIdUsuario() {
@@ -40,27 +40,27 @@ public class UsuarioDTO {
         this.idUsuario = idUsuario;
     }
 
-    public @NotBlank(message = "Nome é obrigatório") String getNome() {
+    public String getNome() {
         return nome;
     }
 
-    public void setNome(@NotBlank(message = "Nome é obrigatório") String nome) {
+    public void setNome(String nome) {
         this.nome = nome;
     }
 
-    public @NotBlank(message = "Email é obrigatório") String getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(@NotBlank(message = "Email é obrigatório") String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public @NotBlank(message = "Tipo de Role é obrigatório") String getTipoRole() {
+    public String getTipoRole() {
         return tipoRole;
     }
 
-    public void setTipoRole(@NotBlank(message = "Tipo de Role é obrigatório") String tipoRole) {
+    public void setTipoRole(String tipoRole) {
         this.tipoRole = tipoRole;
     }
 
@@ -72,11 +72,11 @@ public class UsuarioDTO {
         this.ativo = ativo;
     }
 
-    public @NotBlank(message = "Senha é obrigatória") String getSenha() {
+    public String getSenha() {
         return senha;
     }
 
-    public void setSenha(@NotBlank(message = "Senha é obrigatória") String senha) {
+    public void setSenha(String senha) {
         this.senha = senha;
     }
 }

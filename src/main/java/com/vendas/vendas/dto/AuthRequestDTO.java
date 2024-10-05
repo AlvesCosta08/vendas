@@ -1,9 +1,14 @@
 package com.vendas.vendas.dto;
 
 
+import jakarta.validation.constraints.NotBlank;
+
 public class AuthRequestDTO {
 
+    @NotBlank(message = "Nome de usuário é obrigatório")
     private String username;
+
+    @NotBlank(message = "Senha é obrigatória")
     private String password;
 
     // Construtor padrão
@@ -33,12 +38,10 @@ public class AuthRequestDTO {
         this.password = password;
     }
 
-    // Implementação manual do padrão Builder
     public static Builder builder() {
         return new Builder();
     }
 
-    // Classe Builder
     public static class Builder {
         private String username;
         private String password;

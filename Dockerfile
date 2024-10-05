@@ -1,23 +1,57 @@
-# Use a imagem base do Ubuntu
-FROM ubuntu:latest
+# Etapa de construção
+FROM ubuntu:22.04 AS build
 
-# Instale o Java 21 e Maven
-RUN apt-get update && apt-get install -y openjdk-21-jdk maven && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Define o diretório de trabalho na imagem
+RUN apt-get update && \
+    apt-get install -y openjdk-21-jdk maven && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+
 WORKDIR /app
 
-# Copia o arquivo JAR da aplicação para o diretório de trabalho
-COPY target/vendas-*.jar app.jar
 
-# Copia o arquivo .env para o diretório de trabalho
-#COPY .env ./
+COPY pom.xml .
+COPY src ./src
 
-# Exponha a porta que a aplicação irá rodar
+
+RUN mvn clean package -DskipTests
+
+
+FROM ubuntu:22.04
+
+
+RUN apt-get update && \
+    apt-get install -y openjdk-21-jdk && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+
+WORKDIR /app
+
+
+COPY --from=build /app/target/*.jar app.jar
+
+
+COPY .env ./
+
+
 EXPOSE 8080
 
-# Comando para rodar a aplicação
+
 CMD ["java", "-jar", "app.jar"]
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

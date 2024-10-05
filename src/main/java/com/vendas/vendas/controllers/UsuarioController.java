@@ -3,11 +3,11 @@ package com.vendas.vendas.controllers;
 import com.vendas.vendas.dto.UsuarioDTO;
 import com.vendas.vendas.models.Usuario;
 import com.vendas.vendas.services.UsuarioService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -21,60 +21,38 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioDTO> registrarUsuario(@Valid @RequestBody UsuarioDTO usuarioDTO) {
-        Usuario usuario = new Usuario();
-        usuario.setNome(usuarioDTO.getNome());
-        usuario.setEmail(usuarioDTO.getEmail());
-        usuario.setTipoRole(usuarioDTO.getTipoRole());
-        usuario.setSenha(usuarioDTO.getSenha());
-
-        Usuario usuarioSalvo = usuarioService.registrarUsuario(usuario);
-        return new ResponseEntity<>(converterParaDTO(usuarioSalvo), HttpStatus.CREATED);
+    public ResponseEntity<UsuarioDTO> registrarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
+        UsuarioDTO novoUsuario = usuarioService.registrarUsuario(usuarioDTO);
+        return ResponseEntity.status(201).body(novoUsuario);
     }
 
-    @GetMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> buscarPorId(@PathVariable Long idUsuario) {
-        Usuario usuario = usuarioService.buscarPorId(idUsuario);
-        return new ResponseEntity<>(converterParaDTO(usuario), HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<List<Usuario>> buscarTodos() {
+        List<Usuario> usuarios = usuarioService.buscarTodos();
+        return ResponseEntity.ok(usuarios);
     }
 
-    @GetMapping("/email/{email}")
-    public ResponseEntity<UsuarioDTO> buscarPorEmail(@PathVariable String email) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
+        Usuario usuario = usuarioService.buscarPorId(id);
+        return ResponseEntity.ok(usuario);
+    }
+
+    @GetMapping("/email")
+    public ResponseEntity<Usuario> buscarPorEmail(@RequestParam String email) {
         Usuario usuario = usuarioService.buscarPorEmail(email);
-        return new ResponseEntity<>(converterParaDTO(usuario), HttpStatus.OK);
+        return ResponseEntity.ok(usuario);
     }
 
-    @PutMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> atualizarUsuario(
-            @PathVariable Long idUsuario,
-            @Valid @RequestBody UsuarioDTO usuarioAtualizadoDTO) {
-
-        Usuario usuarioAtualizado = new Usuario();
-        usuarioAtualizado.setNome(usuarioAtualizadoDTO.getNome());
-        usuarioAtualizado.setEmail(usuarioAtualizadoDTO.getEmail());
-        usuarioAtualizado.setTipoRole(usuarioAtualizadoDTO.getTipoRole());
-        usuarioAtualizado.setAtivo(usuarioAtualizadoDTO.getAtivo());
-
-
-        Usuario usuario = usuarioService.atualizarUsuario(idUsuario, usuarioAtualizado);
-        return new ResponseEntity<>(converterParaDTO(usuario), HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuarioAtualizado) {
+        Usuario usuario = usuarioService.atualizarUsuario(id, usuarioAtualizado);
+        return ResponseEntity.ok(usuario);
     }
 
-    @DeleteMapping("/{idUsuario}")
-    public ResponseEntity<Void> deletarUsuario(@PathVariable Long idUsuario) {
-        usuarioService.deletarUsuario(idUsuario);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarUsuario(@PathVariable Long id) {
+        usuarioService.deletarUsuario(id);
         return ResponseEntity.noContent().build();
-    }
-
-    // Método auxiliar para converter Usuario em UsuarioDTO
-    private UsuarioDTO converterParaDTO(Usuario usuario) {
-        return new UsuarioDTO(
-                usuario.getIdUsuario(),
-                usuario.getNome(),
-                usuario.getEmail(),
-                usuario.getSenha(),
-                usuario.getTipoRole(),
-                usuario.getAtivo()
-        );
     }
 }

@@ -14,15 +14,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import static java.security.KeyRep.Type.SECRET;
-
 @Service
 public class JwtService {
 
-    private final String SECRET_KEY = "fQVejCgZ157cV8pRDk5YGCYSoWu5WOrXAF29AOWzBvveELWCOTUz9Gf1ZLamg8uAk0wgNWEsMO2yXSHDvDNKLg=="; // Troque por uma chave secreta forte
+    private final String SECRET_KEY = "fQVejCgZ157cV8pRDk5YGCYSoWu5WOrXAF29AOWzBvveELWCOTUz9Gf1ZLamg8uAk0wgNWEsMO2yXSHDvDNKLg==";
 
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+        return extractClaim(token, claims -> claims.get("email", String.class));
     }
 
     public Date extractExpiration(String token) {
@@ -52,27 +50,23 @@ public class JwtService {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-
-
-    public String GenerateToken(String username){
+    public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("email", username);
         return createToken(claims, username);
     }
 
-
-
     private String createToken(Map<String, Object> claims, String username) {
-
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+1000*60*1))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 1))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 
     private Key getSignKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(String.valueOf(SECRET));
+        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
