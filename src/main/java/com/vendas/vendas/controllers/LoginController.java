@@ -3,7 +3,7 @@ package com.vendas.vendas.controllers;
 import com.vendas.vendas.dto.AuthRequestDTO;
 import com.vendas.vendas.dto.JwtResponseDTO;
 import com.vendas.vendas.services.JwtService;
-import com.vendas.vendas.services.UserInfoService;
+import com.vendas.vendas.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +29,7 @@ public class LoginController {
     private JwtService jwtTokenProvider;
 
     @Autowired
-    private UserInfoService userInfoService;
+    private UsuarioService userInfoService;
 
     @PostMapping("/v1/login")
     public ResponseEntity<JwtResponseDTO> authenticateAndGetToken(@RequestBody AuthRequestDTO authRequestDTO) {

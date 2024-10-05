@@ -1,4 +1,3 @@
-
 CREATE TABLE cliente (
     id_cliente BIGINT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
@@ -8,8 +7,4 @@ CREATE TABLE cliente (
     tipo_cliente VARCHAR(50) NOT NULL,
     FOREIGN KEY (endereco_id) REFERENCES endereco(id_endereco) ON DELETE SET NULL
 );
-
--- O tipo_cliente pode ser usado para diferenciar entre Pessoa Física e Jurídica
--- Adicione os valores do tipo_cliente conforme necessário, por exemplo:
--- 'PF' para Pessoa Física e 'PJ' para Pessoa Jurídica.
 

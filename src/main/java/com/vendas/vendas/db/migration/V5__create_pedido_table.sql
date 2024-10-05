@@ -13,3 +13,4 @@ CREATE TABLE pedido (
     FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente) ON DELETE CASCADE
 ) COMMENT='Tabela para armazenar os pedidos realizados pelos clientes';
 
+

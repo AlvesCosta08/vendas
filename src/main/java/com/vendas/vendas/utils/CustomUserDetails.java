@@ -1,7 +1,6 @@
 package com.vendas.vendas.utils;
 
-import com.vendas.vendas.models.UserInfo;
-import com.vendas.vendas.models.UserRole;
+import com.vendas.vendas.models.Usuario;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,23 +8,25 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
-public class CustomUserDetails extends UserInfo implements UserDetails {
+public class CustomUserDetails implements UserDetails {
 
     private final String username;
     private final String password;
-    Collection<? extends GrantedAuthority> authorities;
+    private final Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetails(Optional<UserInfo> byUsername) {
-        this.username = byUsername.get().getUsername();
-        this.password= byUsername.get().getPassword();
-        List<GrantedAuthority> auths = new ArrayList<>();
 
-        for(UserRole role : byUsername.get().getRoles()){
-
-            auths.add(new SimpleGrantedAuthority(role.getNome().toUpperCase()));
+    public CustomUserDetails(Usuario user) {
+        if (user == null) {
+            throw new IllegalArgumentException("Usuário não pode ser nulo");
         }
+
+        this.username = user.getEmail();
+        this.password = user.getSenha();
+
+        List<GrantedAuthority> auths = new ArrayList<>();
+        auths.add(new SimpleGrantedAuthority(user.getTipoRole().toUpperCase())); // Acesso direto ao método
+
         this.authorities = auths;
     }
 

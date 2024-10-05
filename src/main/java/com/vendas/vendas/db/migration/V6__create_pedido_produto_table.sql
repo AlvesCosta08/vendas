@@ -10,3 +10,4 @@ CREATE TABLE pedido_produto (
 );
 
 COMMENT ON TABLE pedido_produto IS 'Tabela intermediária para armazenar a relação entre pedidos e produtos';
+

@@ -2,8 +2,8 @@ package com.vendas.vendas.services;
 
 
 
-import com.vendas.vendas.models.UserInfo;
-import com.vendas.vendas.repository.UserInfoRepository;
+import com.vendas.vendas.models.Usuario;
+import com.vendas.vendas.repository.UsuarioRepository;
 import com.vendas.vendas.utils.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,15 +17,14 @@ import java.util.Optional;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private UserInfoRepository userRepository;
-
+    private UsuarioRepository usuarioRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<UserInfo> user = userRepository.findByUsername(username);
-        if(user.isEmpty()){
-            throw new UsernameNotFoundException("could not found user..!!");
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
+        if (usuarioOpt.isEmpty()) {
+            throw new UsernameNotFoundException("Usuário não encontrado com o email: " + email);
         }
-        return new CustomUserDetails(user);
+        return new CustomUserDetails(usuarioOpt.get());
     }
 }

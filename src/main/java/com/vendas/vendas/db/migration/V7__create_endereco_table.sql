@@ -1,4 +1,3 @@
--- Criação da tabela endereco
 CREATE TABLE endereco (
     id_endereco BIGINT AUTO_INCREMENT PRIMARY KEY,
     logradouro VARCHAR(200),
@@ -14,3 +13,4 @@ ADD CONSTRAINT fk_cliente_endereco
     FOREIGN KEY (endereco_id)
     REFERENCES endereco(id_endereco)
     ON DELETE SET NULL; -- Define o comportamento de exclusão
+
