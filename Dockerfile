@@ -1,7 +1,7 @@
-# Use a imagem base do OpenJDK
+# Use a imagem do OpenJDK como base
 FROM openjdk:21-jdk-slim
 
-# Defina o diretório de trabalho
+# Define o diretório de trabalho
 WORKDIR /app
 
 # Copie o arquivo JAR da aplicação para o contêiner
@@ -12,7 +12,6 @@ EXPOSE 8080
 
 # Comando para executar a aplicação
 ENTRYPOINT ["java", "-jar", "app.jar"]
-
 
 
 
