@@ -1,21 +1,16 @@
 services:
-  app:
-    build: .
+  springboot-app:
+    image: sua-imagem-springboot  # Substitua pelo nome da sua imagem
+    build:
+      context: /home/codigoquatro/Documentos/vendas
     ports:
       - "8080:8080"
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      SPRING_DATASOURCE_URL: jdbc:mysql://108.167.151.55:3306/${MYSQL_DATABASE}
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
       JWT_EXPIRATION: ${JWT_EXPIRATION}
-    networks:
-      - external-network
-    command: ["java", "-jar", "app.jar"]
-
-networks:
-  external-network:
-    external: true
 
 
 
