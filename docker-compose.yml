@@ -1,32 +1,49 @@
 services:
   mysql:
-    image: mysql:8.0
+    image: mysql:latest
     restart: always
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    ports:
-      - "3306:3306"
     volumes:
-      - mysql-data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
+    networks:
+      - vendas-network
 
-  springboot-app:
-    build:
-      context: /home/codigoquatro/Documentos/vendas
-    image: vendas-app
+  spring-app:
+    build: .
+    restart: always
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}
-      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
-      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
       JWT_EXPIRATION: ${JWT_EXPIRATION}
+    depends_on:
+      - mysql
+    networks:
+      - vendas-network
+
+networks:
+  vendas-network:
+    driver: bridge
 
 volumes:
-  mysql-data:
+  mysql_data:
+
+
+
+
+
+
+
+
+
+
 
 
 
