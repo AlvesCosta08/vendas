@@ -4,9 +4,9 @@ services:
     restart: always
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: vendas
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
@@ -18,9 +18,9 @@ services:
     ports:
       - "8080:8080"
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: vendas
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
       JWT_EXPIRATION: ${JWT_EXPIRATION}
     depends_on:
