@@ -37,10 +37,7 @@ jobs:
           echo "Waiting for application to be ready..."
           sleep 10  # Ajuste o tempo conforme necessário
 
-      - name: Run tests
-        run: |
-          # Comando para rodar seus testes, por exemplo:
-          # docker exec vendas ./run-tests.sh
+
 
       - name: Stop and remove containers
         run: |
