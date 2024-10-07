@@ -3,8 +3,6 @@ services:
     build: .
     ports:
       - "8080:8080"
-    depends_on:
-      - mysql
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
@@ -12,31 +10,12 @@ services:
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
       JWT_EXPIRATION: ${JWT_EXPIRATION}
     networks:
-      - vendas-network
-    command: ["./wait-for-it.sh", "mysql:3306", "--", "java", "-jar", "app.jar"]
-
-  mysql:
-    image: mysql:8.0
-    environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    ports:
-      - "3306:3306"
-    networks:
-      - vendas-network
-    volumes:
-      - mysql-data:/var/lib/mysql
+      - external-network
+    command: ["java", "-jar", "app.jar"]
 
 networks:
-  vendas-network:
-    driver: bridge
-
-volumes:
-  mysql-data:
-
-
+  external-network:
+    external: true
 
 
 
