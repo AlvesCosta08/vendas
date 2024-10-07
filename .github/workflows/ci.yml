@@ -24,7 +24,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '21'
-          distribution: 'temurin' # Adicione esta linha
+          distribution: 'temurin'
 
       - name: Build with Maven
         run: mvn clean install
@@ -34,7 +34,7 @@ jobs:
           java -jar target/vendas-0.0.1-SNAPSHOT.jar &
           sleep 10 # Aguardar o tempo necessário para a aplicação inicializar
 
-      # Adicione etapas para executar testes aqui, se necessário
+
       - name: Run Integration Tests
         run: mvn test
 
