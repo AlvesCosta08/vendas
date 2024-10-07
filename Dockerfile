@@ -5,7 +5,7 @@ FROM openjdk:21-jdk-slim
 WORKDIR /app
 
 # Copie o arquivo JAR da aplicação para o contêiner
-COPY vendas/target/vendas-0.0.1-SNAPSHOT.jar app.jar
+COPY target/vendas-0.0.1-SNAPSHOT.jar app.jar
 
 # Exponha a porta que a aplicação irá usar
 EXPOSE 8080

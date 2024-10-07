@@ -19,11 +19,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      - name: Install Docker Compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
-
       - name: Build Docker Image
         run: |
           docker-compose build
@@ -37,15 +32,6 @@ jobs:
           echo "Waiting for application to be ready..."
           sleep 10  # Ajuste o tempo conforme necessário
 
-
-
       - name: Stop and remove containers
         run: |
           docker-compose down
-
-
-
-
-
-
-
