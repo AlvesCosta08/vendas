@@ -11,12 +11,12 @@ jobs:
 
     services:
       mysql:
-        image: mysql:latest
+        image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-          MYSQL_DATABASE: vendas
-          MYSQL_USER: ${{ secrets.MYSQL_USER }}
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+          MYSQL_DATABASE: ${MYSQL_DATABASE}
+          MYSQL_USER: ${MYSQL_USER}
+          MYSQL_PASSWORD: ${MYSQL_PASSWORD}
         ports:
           - 3306:3306
         options: >-
@@ -49,5 +49,4 @@ jobs:
 
       - name: Clean up Docker images
         run: docker rmi alves74/gestao-estoque
-
 

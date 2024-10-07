@@ -15,7 +15,6 @@ public class CustomUserDetails implements UserDetails {
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
 
-
     public CustomUserDetails(Usuario user) {
         if (user == null) {
             throw new IllegalArgumentException("Usuário não pode ser nulo");
@@ -25,7 +24,7 @@ public class CustomUserDetails implements UserDetails {
         this.password = user.getSenha();
 
         List<GrantedAuthority> auths = new ArrayList<>();
-        auths.add(new SimpleGrantedAuthority(user.getTipoRole().toUpperCase()));
+        auths.add(new SimpleGrantedAuthority("ROLE_" + user.getTipoRole().toUpperCase()));
 
         this.authorities = auths;
     }

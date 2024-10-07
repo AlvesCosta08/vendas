@@ -28,9 +28,7 @@ public class UsuarioService {
     }
 
     public UsuarioDTO registrarUsuario(UsuarioDTO usuarioDTO) {
-        // Verifica se o e-mail já está cadastrado
         usuarioValidator.verificarEmailDuplicado(usuarioDTO.getEmail());
-
 
         Usuario usuario = new Usuario();
         usuario.setNome(usuarioDTO.getNome());
@@ -44,9 +42,7 @@ public class UsuarioService {
         usuario = usuarioRepository.save(usuario);
 
         return new UsuarioDTO(usuario.getIdUsuario(), usuario.getNome(), usuario.getEmail(), null, usuario.getTipoRole(), usuario.getAtivo());
-
     }
-
 
     public List<Usuario> buscarTodos() {
         return usuarioRepository.findAll();

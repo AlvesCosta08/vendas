@@ -33,14 +33,14 @@ public class LoginController {
         String username = authRequestDTO.getUsername();
         String password = authRequestDTO.getPassword();
 
-
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authRequestDTO.getUsername(), authRequestDTO.getPassword())
+                    new UsernamePasswordAuthenticationToken(username, password)
             );
 
             if (authentication.isAuthenticated()) {
-                String token = jwtTokenProvider.generateToken(authRequestDTO.getUsername());
+
+                String token = jwtTokenProvider.generateToken(username, authentication.getAuthorities());
                 JwtResponseDTO response = new JwtResponseDTO(token);
                 return ResponseEntity.ok(response);
             } else {
