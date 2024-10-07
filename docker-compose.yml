@@ -1,18 +1,16 @@
 services:
-  vendas:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  springboot-app:
+    image: openjdk:21-jdk-slim
+    container_name: vendas-app
+    volumes:
+      - ./target/vendas-0.0.1-SNAPSHOT.jar:/app.jar
     environment:
-      SPRING_APPLICATION_NAME: vendas
-      SPRING_DATASOURCE_URL: jdbc:h2:mem:testdb
-      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.h2.Driver
-      SPRING_DATASOURCE_USERNAME: sa
-      SPRING_DATASOURCE_PASSWORD: 123
-      SPRING_H2_CONSOLE_ENABLED: "true"
-      SPRING_H2_CONSOLE_PATH: /h2-console
-      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.H2Dialect
-      SPRING_JPA_SHOW_SQL: "true"
-      SPRING_JPA_HIBERNATE_DDL_AUTO: create
+      - SPRING_DATASOURCE_URL=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.h2.Driver
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=123
+      - SPRING_H2_CONSOLE_ENABLED=true
     ports:
       - "8080:8080"
+    command: ["java", "-jar", "/app.jar"]
+
