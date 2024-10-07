@@ -12,35 +12,30 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      vendas:
-        image: vendas:latest
-        build:
-          context: .
-          dockerfile: Dockerfile
-        ports:
-          - "8080:8080"
-        env:
-          SPRING_APPLICATION_NAME: vendas
-          SPRING_DATASOURCE_URL: jdbc:h2:mem:testdb
-          SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.h2.Driver
-          SPRING_DATASOURCE_USERNAME: sa
-          SPRING_DATASOURCE_PASSWORD: 123
-          SPRING_H2_CONSOLE_ENABLED: true
-          SPRING_H2_CONSOLE_PATH: /h2-console
-          SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.H2Dialect
-          SPRING_JPA_SHOW_SQL: true
-          SPRING_JPA_HIBERNATE_DDL_AUTO: create
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
       - name: Build Docker Image
-        run: docker-compose build
+        run: |
+          docker-compose build
 
       - name: Run Docker Compose
-        run: docker-compose up -d
+        run: |
+          docker-compose up -d
+
+      - name: Wait for application to be ready
+        run: |
+          echo "Waiting for application to be ready..."
+          sleep 10  # Ajuste o tempo conforme necessário
+
+      - name: Stop and remove containers
+        run: |
+          docker-compose down
+
 
 
 
