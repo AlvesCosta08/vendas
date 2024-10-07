@@ -24,6 +24,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '21'
+          distribution: 'temurin' # Adicione esta linha
 
       - name: Build with Maven
         run: mvn clean install
@@ -34,7 +35,6 @@ jobs:
           sleep 10 # Aguardar o tempo necessário para a aplicação inicializar
 
       # Adicione etapas para executar testes aqui, se necessário
-      # Por exemplo, você pode executar um teste de integração:
       - name: Run Integration Tests
         run: mvn test
 
