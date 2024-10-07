@@ -5,17 +5,21 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://108.167.151.55:3306/${MYSQL_DATABASE
+      SPRING_DATASOURCE_URL: jdbc:mysql://108.167.151.55:3306/${MYSQL_DATABASE}?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
       JWT_EXPIRATION: ${JWT_EXPIRATION}
     networks:
       - vendas-network
+    env_file:
+      - .env
 
 networks:
   vendas-network:
     driver: bridge
+
+
 
 
 
