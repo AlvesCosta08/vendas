@@ -28,11 +28,12 @@ EXPOSE 8080
 # Copiando o JAR gerado na etapa de build para a imagem final
 COPY --from=build /app/target/vendas-*.jar app.jar
 
-# Copiando o arquivo .env para a imagem final (opcional)
+# Copiando o arquivo .env para a imagem final
 COPY --from=build /app/.env ./
 
 # Definindo o comando de entrada para executar o JAR
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
 
 
 
