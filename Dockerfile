@@ -2,7 +2,10 @@
 FROM ubuntu:latest AS build
 
 # Atualizando a lista de pacotes e instalando Java e Maven
-RUN apt-get update && apt-get install -y openjdk-21-jdk maven
+RUN apt-get update && \
+    apt-get install -y openjdk-21-jdk maven && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Define o diretório de trabalho
 WORKDIR /app
