@@ -2,7 +2,7 @@
 
 Este projeto é uma aplicação de vendas, organizada de forma a facilitar a manutenção e a escalabilidade. Abaixo está a estrutura de diretórios do projeto, incluindo configurações para Docker, Flyway e a organização do código fonte.
 
-## Estrutura de Diretórios - tv
+## Estrutura de Diretórios - tv 2
 
 ```plaintext
 vendas/
